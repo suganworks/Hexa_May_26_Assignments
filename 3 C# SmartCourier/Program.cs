@@ -11,6 +11,7 @@ namespace SmartCourierApp
     {
         static void Main(string[] args)
         {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.WriteLine("Welcome to SmartCourier Delivery System");
             Console.WriteLine("---------------------------------------");
 
@@ -56,7 +57,6 @@ namespace SmartCourierApp
             }
             else
             {
-                // defaults to standard if they type something else
                 calculator = new StandardDeliveryCalculator();
                 deliveryTypeName = "Standard Delivery";
             }
