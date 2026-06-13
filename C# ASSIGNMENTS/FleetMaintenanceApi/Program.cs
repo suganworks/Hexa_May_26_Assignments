@@ -1,0 +1,43 @@
+using Microsoft.EntityFrameworkCore;
+using FleetMaintenanceApi.Data;
+using FleetMaintenanceApi.Repositories.Interfaces;
+using FleetMaintenanceApi.Repositories.Implementations;
+using FleetMaintenanceApi.Services.Interfaces;
+using FleetMaintenanceApi.Services.Implementations;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+
+builder.Services.AddDbContext<FleetMaintenanceDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+builder.Services.AddScoped<IVehicleRepository,     VehicleRepository>();
+builder.Services.AddScoped<IDriverRepository,      DriverRepository>();
+builder.Services.AddScoped<IMaintenanceRepository, MaintenanceRepository>();
+
+builder.Services.AddScoped<IVehicleService,     VehicleService>();
+builder.Services.AddScoped<IDriverService,      DriverService>();
+builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fleet Maintenance API v1");
+        c.RoutePrefix = string.Empty;
+    });
+}
+
+app.UseAuthorization();
+app.MapControllers();
+
+app.Run();
